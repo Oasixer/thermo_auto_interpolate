@@ -239,6 +239,7 @@ def get_secondary_row(group, secondary_var, secondary_val, primary_val, primary_
     else:
         row = group.loc[secondary_indices[0]]
         print(f'Found exact match for {secondary_var["symbol"]}={row[secondary_var["symbol"]]} {secondary_var["units"]} for {primary_var["symbol"]}={row[primary_var["symbol"]]}')
+        return row
 
 def a6_lookup(eqn_map):
     # for now, require P and T
@@ -277,7 +278,7 @@ def a6_lookup(eqn_map):
         row_1 = rows[0]
         row_2 = rows[1]
         row = row_1 + (index-index_1)*(row_1-row_2)/(index_1-index_2)
-        print(f'Interpolating between {primary_var["symbol"]}={index_1} {primary_var["units"]} and {primary_var["symbol"]}={index_2} {primary_var["units"]}, using the interpolated value of {secondary_var["symbol"]} ({secondary_var["units"]}) above.')
+        print(f'Interpolating between {primary_var["symbol"]}={index_1} {primary_var["units"]} and {primary_var["symbol"]}={index_2} {primary_var["units"]}, using the interpolated value(s) of {secondary_var["symbol"]}({secondary_var["units"]}) above.')
     else:
         print(f'Found exact match for {primary_var["symbol"]}={primary_val} {primary_var["units"]}')
         group = superheated_water.loc[superheated_water[primary_var['symbol']] == primary_val]
@@ -305,7 +306,7 @@ while(1):
 
     if 'P' in eqn_map and 'T' in eqn_map:
         print('P and T both provided, assuming superheated.')
-        print(f'P={eqn_map["P"]}kPa={eqn_map["P"]/1000}MPa')
+        print(f'P={eqn_map["P"]}kPa={eqn_map["P"]/1000}MPa\n')
         eqn_map["P"] /= 1000
         a6_lookup(eqn_map)
 
