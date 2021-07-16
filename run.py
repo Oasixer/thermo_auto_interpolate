@@ -55,15 +55,6 @@ VARS = {'P': {'symbol': 'P',
               'units': ''}
         }
 
-def to_left_edge(var_symbol):
-    return var_symbol+'_f'
-
-def to_right_edge(var_symbol):
-    return var_symbol+'_g'
-
-def to_edges(var_symbol):
-    return [to_left_edge(var_symbol), to_right_edge(var_symbol)]
-
 def is_left_edge(var_symbol):
     return var_symbol.endswith('_f')
 
