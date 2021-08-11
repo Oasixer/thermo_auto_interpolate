@@ -116,8 +116,8 @@ def find_neighbours(value, df, colname):
     if not exactmatch.empty:
         return exactmatch.index
     else:
-        #  print(f'looking for neighbors of {colname}={value} in ')
-        #  print(df)
+        print(f'looking for neighbors of {colname}={value} in ')
+        print(df)
         try:
             lowerneighbour_ind = df[df[colname] < value][colname].idxmax()
         except ValueError:
@@ -129,6 +129,7 @@ def find_neighbours(value, df, colname):
             # just set upper neighbor to None if we are looking up a value too high
             #  print('heck')
             upperneighbour_ind = None
+        print(f'found: df[{lowerneighbour_ind}]={None if not lowerneighbour_ind else df[colname][lowerneighbour_ind]} < {value} < df[{upperneighbour_ind}]={None if not upperneighbour_ind else df[colname][upperneighbour_ind]}')
         return [lowerneighbour_ind, upperneighbour_ind] 
 
 def interp_a4_a5(eqn_map):
@@ -140,6 +141,11 @@ def interp_a4_a5(eqn_map):
         else:
             secondary_var = VARS[name]
             secondary_val = v
+    if 'P' not in eqn_map and 'T' not in eqn_map: # no primary selected, oops
+        name = list(eqn_map.keys())[0]
+        primary_val = eqn_map[name]
+        primary_var = VARS[name]
+        table = primary_var['table']
 
     print(f'Performing {primary_var["table_name"]} lookup.\n')
     indices = find_neighbours(primary_val, table, primary_var["symbol"])
@@ -289,7 +295,7 @@ while(1):
     eqn1 = input("input eqn1: ")
     eqn2 = input("input eqn2: ")
     eqns = [eqn1, eqn2]
-    #  eqns = ['v=17.2', 'P=10']
+    #  eqns = ['u=2506', 'h=2675']
     eqn_map = {}
     for eqn in eqns:
         split = eqn.split('=')
@@ -303,4 +309,7 @@ while(1):
 
     elif 'P' in eqn_map or 'T' in eqn_map:
         interp_a4_a5(eqn_map)
+    else:
+        print('neither T nor P provided, assuming superheated.')
+        a6_lookup(eqn_map)
 
